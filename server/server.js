@@ -1,1 +1,0 @@
-"const express = require('express');\nconst app = express();\nconst port = 3000;\napp.use(express.json());\napp.get('/', (req, res) => {\n  res.send('Senior Browser API');\n});\napp.listen(port, () => {\n  console.log(\`Server running on port \${port}\`);\n});" 
