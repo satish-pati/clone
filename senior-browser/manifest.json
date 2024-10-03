@@ -1,0 +1,21 @@
+{
+    "manifest_version": 3,
+    "name": "Senior Browser",
+    "version": "1.0",
+    "description": "A Chrome extension for Senior-friendly browsing",
+    "action": {
+      "default_popup": "public/popup.html"
+    },
+    "background": {
+      "service_worker": "src/background.js"
+    },
+    "content_scripts": [
+      {
+        "matches": ["<all_urls>"],
+        "js": ["src/content.js"]
+      }
+    ],
+    "permissions": ["storage", "activeTab", "scripting"],
+    "options_page": "public/options.html"
+  }
+  
