@@ -17,9 +17,13 @@
       "css": ["public/popup.css"] 
     }
   ],
-  "permissions": ["storage", "activeTab", "scripting", "declarativeNetRequest", 
-    "declarativeNetRequestWithHostAccess","declarativeNetRequestFeedback"],
+  "permissions": ["storage", "activeTab", "scripting", "declarativeNetRequest", "downloads"],
   "host_permissions": ["https://www.google.com/*", "https://www.google.co.in/*","*://*.google.com/*"],
   
-  
+  "web_accessible_resources": [
+    {
+      "resources": ["dist/*.css"],
+      "matches": ["<all_urls>"]
+    }
+  ]
 }
