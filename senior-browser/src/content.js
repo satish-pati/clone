@@ -170,7 +170,6 @@ const blurNegnews = () => {
 
     allNewstext.forEach((box) => {
         const newsText = box.innerText;
-
         if (containsNegtext(newsText)) {
             box.style.filter = "blur(8px)";
             box.style.transition = "filter 0.3s ease";
