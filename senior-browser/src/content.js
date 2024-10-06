@@ -8,17 +8,21 @@ const Words = [
     "violence", "war", "worry", "end of the world", "catastrophic event",
     "health crisis", "loneliness epidemic", "negative impact", "social isolation",
     "mental breakdown", "financial ruin", "heartbreak", "unemployment rate rises",
+
+
+
     "recession", "inflation", "debt crisis", "stock market crash", "economic collapse", 
     "job cuts", "layoffs", "corruption", "political unrest", "protests", 
     "civil war", "coup", "sanctions", "government collapse", "oppression", 
     "discrimination", "hate crime", "genocide", "human trafficking", "war crime", 
     "famine", "drought", "refugee crisis", "displacement", "forced migration","raped","attack",
+
     
-    "climate change", "global warming", "natural disaster", "earthquake", "tsunami", 
+     "global warming", "natural disaster", "earthquake", "tsunami", 
     "flood", "hurricane", "wildfire", "volcanic eruption", "oil spill", 
     "deforestation", "biodiversity loss", "extinction", "habitat destruction", 
     "pollution", "ozone depletion", "acid rain", "environmental degradation", 
-    "melting glaciers", "rising sea levels", "water scarcity", "fossil fuel dependency",
+    "melting glaciers", "rising sea levels", "water scarcity", "fossil fuel dependency","crime",
     
     "pandemic", "epidemic", "outbreak", "disease", "infection", "virus", "cancer", 
     "cholera", "Ebola", "HIV", "AIDS", "malaria", "influenza", "fever", 
@@ -48,7 +52,7 @@ const Words = [
     "cancel culture", "outrage", "online backlash", "doxxing", "public shaming", 
     "social media addiction", "echo chamber", "polarization", "fake accounts", 
     "online scam", "hate speech", "trolling", "misrepresentation", "division", 
-    "mob mentality", "toxic community", "deplatforming",
+    "mob mentality", "toxic community", "deplatforming","dead","killed",
     
     "aging", "dementia", "Alzheimer's", "arthritis", "osteoporosis", "chronic illness", 
     "heart disease", "stroke", "diabetes", "cancer", "hypertension", "hearing loss", 
@@ -67,9 +71,7 @@ const Words = [
     "discrimination against elderly", "feeling of abandonment", "worthlessness", 
     "helplessness", "low self-esteem", "emotional turmoil", "depression in old age", 
     "feeling forgotten", "fear of death", "fear of burdening others", "existential crisis", 
-    
-    
-    
+
     "murder", "homicide", "stabbing", "shooting", "gun violence", "school shootings", 
     "mass shooting", "terrorism", "terrorist attack", "bombing", "explosion", 
     "car accident", "hit-and-run", "fatal accident", "road rage", "armed robbery", 
@@ -87,7 +89,6 @@ const Words = [
     "violent death", "assassination", "execution", "mugging", "home invasion", 
     "neighborhood shooting", "plane crash", "train derailment", "industrial accident", 
     "workplace violence", "mass casualty", "armed conflict","attack" ,"murderer",
-   
 ];
 
 function hideNegContent() {
@@ -102,8 +103,7 @@ function hideNegContent() {
             res.innerHTML = `
                 <div class="negtextbox">
                   <strong>Website:</strong> <a href="${window.location.href}" target="_blank">${document.title}</a><br>
-
-                    <span>This content contains sensitive or negative information.</span><br>
+                    <span>This content may contain negative information.</span><br>
                     <button class="showcontent">Show Content</button>
                 </div>`;
      res.querySelector('.showcontent').addEventListener('click', function () {
@@ -145,9 +145,9 @@ styleboxes.innerHTML = `
     }
     .postivetext {
         text-align: center;
-        padding: 20px;
-        font-size: 1.2em;
-        color: #006400;
+        padding: 10px;
+        font-size: 1.5em;
+        color: #add8e6;
     }
 `;
 document.head.appendChild(styleboxes);
@@ -190,3 +190,29 @@ const blurNegnews = () => {
 };
 
 window.addEventListener('load', blurNegnews );
+const button = document.createElement('button');
+button.textContent = 'Read Content';
+button.style.position = 'fixed';
+button.style.top = '10px';
+button.style.right = '10px';
+button.style.zIndex = '9999'; 
+button.style.backgroundColor = '#4CAF50';
+button.style.color = 'white';
+button.style.border = 'none';
+button.style.padding = '10px';
+button.style.cursor = 'pointer';
+button.style.borderRadius = '5px';
+button.style.fontSize = '14px';
+
+document.body.appendChild(button);
+
+function readPageContent() {
+    const bodyText = document.body.innerText;
+    chrome.runtime.sendMessage({ action: 'readContent', text: bodyText });
+}
+
+button.addEventListener('click', readPageContent);
+
+window.addEventListener('load', () => {
+    document.body.appendChild(button);
+});
