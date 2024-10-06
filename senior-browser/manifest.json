@@ -17,7 +17,7 @@
       "css": ["public/popup.css"] 
     }
   ],
-  "permissions": ["storage", "activeTab", "scripting", "declarativeNetRequest", "downloads"],
+  "permissions": ["storage", "activeTab", "scripting", "declarativeNetRequest", "tts"],
   "host_permissions": ["https://www.google.com/*", "https://www.google.co.in/*","*://*.google.com/*"],
   
   "web_accessible_resources": [
