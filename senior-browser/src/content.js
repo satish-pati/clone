@@ -218,25 +218,30 @@ window.addEventListener('load', () => {
 });
 let mediaRecorder;
 let recordedChunks = [];
+
 function createButtons() {
     const buttonContainer = document.createElement('div');
     buttonContainer.style.position = 'fixed';
     buttonContainer.style.top = '10px';
     buttonContainer.style.left = '10px';
     buttonContainer.style.zIndex = 9999;
-    buttonContainer.style.backgroundColor = 'white'; 
+    buttonContainer.style.backgroundColor = 'rgba(255, 255, 255, 0.9)'; 
     buttonContainer.style.padding = '10px';
     buttonContainer.style.borderRadius = '5px';
     buttonContainer.style.boxShadow = '0 2px 5px rgba(0,0,0,0.3)';
+    buttonContainer.style.display = 'flex';
+    buttonContainer.style.gap = '10px';
 
     const startButton = document.createElement('button');
     startButton.innerText = 'Start Video';
     startButton.id = 'start_video';
-    
+    styleButton(startButton);
+
     const stopButton = document.createElement('button');
     stopButton.innerText = 'Stop Video';
     stopButton.id = 'stop_video';
     stopButton.disabled = true;
+    styleButton(stopButton);
 
     buttonContainer.appendChild(startButton);
     buttonContainer.appendChild(stopButton);
@@ -244,6 +249,28 @@ function createButtons() {
 
     startButton.addEventListener('click', startRecording);
     stopButton.addEventListener('click', stopRecording);
+}
+
+function styleButton(button) {
+    button.style.padding = '10px 15px';
+    button.style.border = 'none';
+    button.style.borderRadius = '5px';
+    button.style.cursor = 'pointer';
+    button.style.fontSize = '16px';
+    button.style.color = 'white';
+
+    if (button.id === 'start_video') {
+        button.style.backgroundColor = '#28a745'; 
+    } else if (button.id === 'stop_video') {
+        button.style.backgroundColor = '#dc3545'; 
+    }
+
+    button.onmouseover = () => {
+        button.style.opacity = '0.8';
+    };
+    button.onmouseout = () => {
+        button.style.opacity = '1';
+    };
 }
 
 async function startRecording() {
