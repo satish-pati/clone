@@ -216,3 +216,77 @@ button.addEventListener('click', readPageContent);
 window.addEventListener('load', () => {
     document.body.appendChild(button);
 });
+let mediaRecorder;
+let recordedChunks = [];
+function createButtons() {
+    const buttonContainer = document.createElement('div');
+    buttonContainer.style.position = 'fixed';
+    buttonContainer.style.top = '10px';
+    buttonContainer.style.left = '10px';
+    buttonContainer.style.zIndex = 9999;
+    buttonContainer.style.backgroundColor = 'white'; 
+    buttonContainer.style.padding = '10px';
+    buttonContainer.style.borderRadius = '5px';
+    buttonContainer.style.boxShadow = '0 2px 5px rgba(0,0,0,0.3)';
+
+    const startButton = document.createElement('button');
+    startButton.innerText = 'Start Video';
+    startButton.id = 'start_video';
+    
+    const stopButton = document.createElement('button');
+    stopButton.innerText = 'Stop Video';
+    stopButton.id = 'stop_video';
+    stopButton.disabled = true;
+
+    buttonContainer.appendChild(startButton);
+    buttonContainer.appendChild(stopButton);
+    document.body.appendChild(buttonContainer);
+
+    startButton.addEventListener('click', startRecording);
+    stopButton.addEventListener('click', stopRecording);
+}
+
+async function startRecording() {
+    try {
+        const stream = await navigator.mediaDevices.getDisplayMedia({
+            video: true,
+            audio: true
+        });
+
+        mediaRecorder = new MediaRecorder(stream);
+
+        mediaRecorder.ondataavailable = event => {
+            if (event.data.size > 0) {
+                recordedChunks.push(event.data);
+            }
+        };
+
+        mediaRecorder.onstop = () => {
+            const blob = new Blob(recordedChunks, { type: 'video/webm' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'recorded-video.webm';
+            document.body.appendChild(a);
+            a.click(); 
+            document.body.removeChild(a); 
+
+            recordedChunks = [];
+        };
+
+        mediaRecorder.start();
+        document.getElementById('start_video').disabled = true;
+        document.getElementById('stop_video').disabled = false;
+    } catch (error) {
+        console.error('Error starting recording:', error);
+        alert('Could not start recording: ' + error.message);
+    }
+}
+
+function stopRecording() {
+    mediaRecorder.stop();
+    document.getElementById('start_video').disabled = false;
+    document.getElementById('stop_video').disabled = true;
+}
+
+createButtons();
