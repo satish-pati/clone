@@ -64,8 +64,6 @@ const Words = [
     "long-term care", "limited mobility", "loss of autonomy", "caregiver stress", 
     "healthcare crisis", "medication dependency", "elderly neglect", "infection risk", 
     
-   
-    
     "loneliness", "social isolation", "loss of friends", "death of spouse", "grief", 
     "bereavement", "family estrangement", "lack of community support", "ageism", 
     "discrimination against elderly", "feeling of abandonment", "worthlessness", 
@@ -115,7 +113,7 @@ function hideNegContent() {
   const results = document.querySelectorAll('.N54PNb,article, h3, h4, h5, h6, .xrnccd, .VDXfz, .ZINbbc'); 
     results.forEach(res => {
         let hasNegWords = Words.some(word => {
-            const regx = new RegExp(`\\b${word}\\b`, 'gi');
+            const regx = new RegExp('\\b${word}\\b', 'gi');
             return regx.test(res.innerText);
         });
         if (hasNegWords) {
@@ -178,7 +176,7 @@ window.onload = hideNegContent;
 const containsNegtext = (txt) => {
     return Words.some((word) => txt.toLowerCase().includes(word));
 };
-const blurNegnews = () => {
+const blurNegnews = () =>{
     const headlines = document.querySelectorAll(".n0jPhd.ynAwRc.MBeuO.nDgy9d");
     const newsDescription = document.querySelectorAll(".GI74Re.nDgy9d");
     const result = document.querySelectorAll('.iHxmLe'); 
@@ -209,6 +207,46 @@ const blurNegnews = () => {
     });
 };
 window.addEventListener('load', blurNegnews );
+let isReading = false; // variable to track reading state
+
+// Function to read the page content
+function readPageContent() {
+    const topStoriesSection = document.querySelectorAll(' article, h3, h4, h5, h6, .xrnccd, .VDXfz, .ZINbbc, .iHxmLe, .KYaZsb');
+    let bodyText = '';
+
+    topStoriesSection.forEach(section => {
+        const hasNegativeWord = Words.some(word => {
+            const regx = new RegExp('\\b${word}\\b', 'gi');
+            return regx.test(section.innerText);
+        });
+
+        if (!section.style.filter.includes('blur') && !hasNegativeWord) {
+            bodyText += section.innerText + ' ';
+        }
+    });
+
+    if (bodyText.trim()) {
+        const utterance = new SpeechSynthesisUtterance(bodyText);
+        window.speechSynthesis.speak(utterance);
+        isReading = true;
+        button.textContent = 'Stop Reading';
+
+        // When speech ends
+        utterance.onend = () => {
+            stopReading();
+        };
+    } else {
+        alert("No content found to read that isn't blurred or negative.");
+    }
+}
+
+function stopReading() {
+    window.speechSynthesis.cancel(); 
+    isReading = false; // Update state
+    button.textContent = 'Read Content'; // Reset button text
+}
+
+// Button setup
 const button = document.createElement('button');
 button.textContent = 'Read Content';
 button.style.position = 'fixed';
@@ -223,14 +261,19 @@ button.style.cursor = 'pointer';
 button.style.borderRadius = '5px';
 button.style.fontSize = '14px';
 document.body.appendChild(button);
-function readPageContent() {
-    const bodyText = document.body.innerText;
-    chrome.runtime.sendMessage({ action: 'readContent', text: bodyText });
-}
-button.addEventListener('click', readPageContent);
+
+button.addEventListener('click', () => {
+    if (isReading) {
+        stopReading();
+    } else {
+        readPageContent();
+    }
+});
+
 window.addEventListener('load', () => {
     document.body.appendChild(button);
 });
+
 let mediaRecorder;
 let recordedChunks = [];
 function createButtons() {
