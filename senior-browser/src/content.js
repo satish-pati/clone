@@ -1,3 +1,18 @@
+
+// List of negative words
+const Words = [
+    "abuse", "accident", "aging", "alone", "anxiety", "apocalypse", "bad",
+    "bankruptcy", "battle", "betrayal", "crisis", "death", "despair", "disaster",
+    "divorce", "doom", "doubt", "fear", "fired", "fraud", "gloom", "grief", "hate",
+    "hopeless", "injury", "isolation", "jeopardy", "loss", "murder", "neglect",
+    "pain", "panic", "paranoia", "regret", "riot", "robbery", "sad", "scam",
+    "scandal", "stress", "struggle", "suffering", "suicide", "terror", "tragedy",
+    "violence", "war", "worry", "end of the world", "catastrophic event",
+    "health crisis", "loneliness epidemic", "negative impact", "social isolation",
+    "mental breakdown", "financial ruin", "heartbreak", "unemployment rate rises",
+
+
+
 // List of negative words
 const Words = [
     "abuse", "accident", "aging", "alone", "anxiety", "apocalypse", "bad",
@@ -108,7 +123,7 @@ function zoomPage(factorChange) {
     document.body.style.zoom = zoomFactor;
 }
 function changeContrast(contrast) {
-    document.body.style.filter = contrast`(${contrast})`;
+    document.body.style.filter = `contrast(${contrast})`;
 }
 // Function to hide negative content based on the predefined negative words
 function hideNegContent() {
@@ -419,4 +434,48 @@ function stopRecording() {
 window.addEventListener('load', () => {
     createButtons();
 
-});
+}); 
+
+
+
+
+
+    "recession", "inflation", "debt crisis", "stock market crash", "economic collapse", 
+    "job cuts", "layoffs", "corruption", "political unrest", "protests", 
+    "civil war", "coup", "sanctions", "government collapse", "oppression", 
+    "discrimination", "hate crime", "genocide", "human trafficking", "war crime", 
+    "famine", "drought", "refugee crisis", "displacement", "forced migration","raped","attack",
+
+    
+     "global warming", "natural disaster", "earthquake", "tsunami", 
+    "flood", "hurricane", "wildfire", "volcanic eruption", "oil spill", 
+    "deforestation", "biodiversity loss", "extinction", "habitat destruction", 
+    "pollution", "ozone depletion", "acid rain", "environmental degradation", 
+    "melting glaciers", "rising sea levels", "water scarcity", "fossil fuel dependency","crime",
+    
+    "pandemic", "epidemic", "outbreak", "disease", "infection", "virus", "cancer", 
+    "cholera", "Ebola", "HIV", "AIDS", "malaria", "influenza", "fever", 
+    "chronic illness", "mental illness", "depression", "PTSD", "self-harm", 
+    "overdose", "substance abuse", "addiction", "drug trafficking", "alcoholism", 
+    "obesity crisis", "malnutrition", "public health emergency", "healthcare crisis",
+    
+    
+    "poverty", "homelessness", "income inequality", "racial injustice", 
+    "gender inequality", "child labor", "domestic violence", "sexual harassment", 
+    "slavery", "mass incarceration", "police brutality", "displacement", 
+    "refugee camps", "detention centers", "broken justice system", 
+    "youth unemployment", "crime wave", "gun violence", "school shootings", 
+    "assault", "sexual assault", "terrorism", "radicalization", "human rights violations",
+    
+    "desperation", "hopelessness", "frustration", "helplessness", "rejection", 
+    "loneliness", "worthlessness", "despondency", "shame", "guilt", "misery", 
+    "anguish", "grief", "sorrow", "self-doubt", "insecurity", "abandonment", 
+    "breakdown", "emotional turmoil", "trauma", "post-traumatic stress", 
+    "fear of failure", "low self-esteem", "identity crisis", "existential crisis",
+    
+    "arms race", "military conflict", "bombing", "airstrike", "missile attack", 
+    "occupation", "invasion", "terror cell", "genocide", "nuclear war", 
+    "chemical attack", "biological weapons", "massacre", "hostage situation", 
+    "insurgency", "guerilla warfare", "siege", "peace talks fail", "refugee exodus",
+    
+    "cancel culture", "outrage", "online backlash", "doxxing", "public shaming", 
