@@ -90,6 +90,26 @@ const Words = [
     "neighborhood shooting", "plane crash", "train derailment", "industrial accident", 
     "workplace violence", "mass casualty", "armed conflict","attack" ,"murderer",
 ];
+let zoomFactor = 1.0; 
+let contrastValue = 1.0; 
+function changeBackgroundColor(color) {
+    document.documentElement.style.setProperty('--bg-color', color); 
+    const style = document.createElement('style');
+    style.innerHTML = `
+        * {
+            background-color: var(--bg-color) !important; /* Apply color to all elements */
+        }
+    `;
+    document.head.appendChild(style);
+}
+function zoomPage(factorChange) {
+    zoomFactor += factorChange;
+    document.body.style.zoom = zoomFactor;
+}
+
+function changeContrast(contrast) {
+    document.body.style.filter = `contrast(${contrast})`;
+}
 
 function hideNegContent() {
   const results = document.querySelectorAll('.N54PNb,article, h3, h4, h5, h6, .xrnccd, .VDXfz, .ZINbbc'); 
@@ -188,7 +208,6 @@ const blurNegnews = () => {
         }
     });
 };
-
 window.addEventListener('load', blurNegnews );
 const button = document.createElement('button');
 button.textContent = 'Read Content';
@@ -203,22 +222,17 @@ button.style.padding = '10px';
 button.style.cursor = 'pointer';
 button.style.borderRadius = '5px';
 button.style.fontSize = '14px';
-
 document.body.appendChild(button);
-
 function readPageContent() {
     const bodyText = document.body.innerText;
     chrome.runtime.sendMessage({ action: 'readContent', text: bodyText });
 }
-
 button.addEventListener('click', readPageContent);
-
 window.addEventListener('load', () => {
     document.body.appendChild(button);
 });
 let mediaRecorder;
 let recordedChunks = [];
-
 function createButtons() {
     const buttonContainer = document.createElement('div');
     buttonContainer.style.position = 'fixed';
@@ -236,19 +250,58 @@ function createButtons() {
     startButton.innerText = 'Start Video';
     startButton.id = 'start_video';
     styleButton(startButton);
-
     const stopButton = document.createElement('button');
     stopButton.innerText = 'Stop Video';
     stopButton.id = 'stop_video';
     stopButton.disabled = true;
     styleButton(stopButton);
+    
+    const zoomInButton = document.createElement('button');
+    zoomInButton.innerText = 'Zoom In';
+    styleButton(zoomInButton);
+    zoomInButton.addEventListener('click', () => zoomPage(0.1));
+
+    const zoomOutButton = document.createElement('button');
+    zoomOutButton.innerText = 'Zoom Out';
+    styleButton(zoomOutButton);
+    zoomOutButton.addEventListener('click', () => zoomPage(-0.1));
+
+    const contrastIncreaseButton = document.createElement('button');
+    contrastIncreaseButton.innerText = 'Increase Contrast';
+    styleButton(contrastIncreaseButton);
+    contrastIncreaseButton.addEventListener('click', () => {
+        contrastValue += 0.1;
+        changeContrast(contrastValue);
+    });
+
+    const contrastDecreaseButton = document.createElement('button');
+    contrastDecreaseButton.innerText = 'Decrease Contrast';
+    styleButton(contrastDecreaseButton);
+    contrastDecreaseButton.addEventListener('click', () => {
+        contrastValue = Math.max(0.5, contrastValue - 0.1);
+        changeContrast(contrastValue);
+    });
+
+    const bgColorInput = document.createElement('input');
+    bgColorInput.type = 'color';
+    bgColorInput.style.width = '50px';
+    bgColorInput.addEventListener('input', (event) => {
+        const color = event.target.value;
+        changeBackgroundColor(color);
+    });
 
     buttonContainer.appendChild(startButton);
     buttonContainer.appendChild(stopButton);
+    buttonContainer.appendChild(zoomInButton);
+    buttonContainer.appendChild(zoomOutButton);
+    buttonContainer.appendChild(contrastIncreaseButton);
+    buttonContainer.appendChild(contrastDecreaseButton);
+    buttonContainer.appendChild(bgColorInput);
     document.body.appendChild(buttonContainer);
 
     startButton.addEventListener('click', startRecording);
     stopButton.addEventListener('click', stopRecording);
+
 }
 
 function styleButton(button) {
@@ -287,7 +340,6 @@ async function startRecording() {
                 recordedChunks.push(event.data);
             }
         };
-
         mediaRecorder.onstop = () => {
             const blob = new Blob(recordedChunks, { type: 'video/webm' });
             const url = URL.createObjectURL(blob);
@@ -316,4 +368,7 @@ function stopRecording() {
     document.getElementById('stop_video').disabled = true;
 }
 
-createButtons();
+window.addEventListener('load', () => {
+    createButtons();
+
+});
