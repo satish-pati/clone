@@ -8,17 +8,21 @@ const Words = [
     "violence", "war", "worry", "end of the world", "catastrophic event",
     "health crisis", "loneliness epidemic", "negative impact", "social isolation",
     "mental breakdown", "financial ruin", "heartbreak", "unemployment rate rises",
+
+
+
     "recession", "inflation", "debt crisis", "stock market crash", "economic collapse", 
     "job cuts", "layoffs", "corruption", "political unrest", "protests", 
     "civil war", "coup", "sanctions", "government collapse", "oppression", 
     "discrimination", "hate crime", "genocide", "human trafficking", "war crime", 
     "famine", "drought", "refugee crisis", "displacement", "forced migration","raped","attack",
+
     
-    "climate change", "global warming", "natural disaster", "earthquake", "tsunami", 
+     "global warming", "natural disaster", "earthquake", "tsunami", 
     "flood", "hurricane", "wildfire", "volcanic eruption", "oil spill", 
     "deforestation", "biodiversity loss", "extinction", "habitat destruction", 
     "pollution", "ozone depletion", "acid rain", "environmental degradation", 
-    "melting glaciers", "rising sea levels", "water scarcity", "fossil fuel dependency",
+    "melting glaciers", "rising sea levels", "water scarcity", "fossil fuel dependency","crime",
     
     "pandemic", "epidemic", "outbreak", "disease", "infection", "virus", "cancer", 
     "cholera", "Ebola", "HIV", "AIDS", "malaria", "influenza", "fever", 
@@ -48,7 +52,7 @@ const Words = [
     "cancel culture", "outrage", "online backlash", "doxxing", "public shaming", 
     "social media addiction", "echo chamber", "polarization", "fake accounts", 
     "online scam", "hate speech", "trolling", "misrepresentation", "division", 
-    "mob mentality", "toxic community", "deplatforming",
+    "mob mentality", "toxic community", "deplatforming","dead","killed",
     
     "aging", "dementia", "Alzheimer's", "arthritis", "osteoporosis", "chronic illness", 
     "heart disease", "stroke", "diabetes", "cancer", "hypertension", "hearing loss", 
@@ -67,9 +71,7 @@ const Words = [
     "discrimination against elderly", "feeling of abandonment", "worthlessness", 
     "helplessness", "low self-esteem", "emotional turmoil", "depression in old age", 
     "feeling forgotten", "fear of death", "fear of burdening others", "existential crisis", 
-    
-    
-    
+
     "murder", "homicide", "stabbing", "shooting", "gun violence", "school shootings", 
     "mass shooting", "terrorism", "terrorist attack", "bombing", "explosion", 
     "car accident", "hit-and-run", "fatal accident", "road rage", "armed robbery", 
@@ -87,8 +89,27 @@ const Words = [
     "violent death", "assassination", "execution", "mugging", "home invasion", 
     "neighborhood shooting", "plane crash", "train derailment", "industrial accident", 
     "workplace violence", "mass casualty", "armed conflict","attack" ,"murderer",
-   
 ];
+let zoomFactor = 1.0; 
+let contrastValue = 1.0; 
+function changeBackgroundColor(color) {
+    document.documentElement.style.setProperty('--bg-color', color); 
+    const style = document.createElement('style');
+    style.innerHTML = `
+        * {
+            background-color: var(--bg-color) !important; /* Apply color to all elements */
+        }
+    `;
+    document.head.appendChild(style);
+}
+function zoomPage(factorChange) {
+    zoomFactor += factorChange;
+    document.body.style.zoom = zoomFactor;
+}
+
+function changeContrast(contrast) {
+    document.body.style.filter = `contrast(${contrast})`;
+}
 
 function hideNegContent() {
   const results = document.querySelectorAll('.N54PNb,article, h3, h4, h5, h6, .xrnccd, .VDXfz, .ZINbbc'); 
@@ -102,8 +123,7 @@ function hideNegContent() {
             res.innerHTML = `
                 <div class="negtextbox">
                   <strong>Website:</strong> <a href="${window.location.href}" target="_blank">${document.title}</a><br>
-
-                    <span>This content contains sensitive or negative information.</span><br>
+                    <span>This content may contain negative information.</span><br>
                     <button class="showcontent">Show Content</button>
                 </div>`;
      res.querySelector('.showcontent').addEventListener('click', function () {
@@ -145,9 +165,9 @@ styleboxes.innerHTML = `
     }
     .postivetext {
         text-align: center;
-        padding: 20px;
-        font-size: 1.2em;
-        color: #006400;
+        padding: 10px;
+        font-size: 1.5em;
+        color: #add8e6;
     }
 `;
 document.head.appendChild(styleboxes);
@@ -188,5 +208,167 @@ const blurNegnews = () => {
         }
     });
 };
-
 window.addEventListener('load', blurNegnews );
+const button = document.createElement('button');
+button.textContent = 'Read Content';
+button.style.position = 'fixed';
+button.style.top = '10px';
+button.style.right = '10px';
+button.style.zIndex = '9999'; 
+button.style.backgroundColor = '#4CAF50';
+button.style.color = 'white';
+button.style.border = 'none';
+button.style.padding = '10px';
+button.style.cursor = 'pointer';
+button.style.borderRadius = '5px';
+button.style.fontSize = '14px';
+document.body.appendChild(button);
+function readPageContent() {
+    const bodyText = document.body.innerText;
+    chrome.runtime.sendMessage({ action: 'readContent', text: bodyText });
+}
+button.addEventListener('click', readPageContent);
+window.addEventListener('load', () => {
+    document.body.appendChild(button);
+});
+let mediaRecorder;
+let recordedChunks = [];
+function createButtons() {
+    const buttonContainer = document.createElement('div');
+    buttonContainer.style.position = 'fixed';
+    buttonContainer.style.top = '10px';
+    buttonContainer.style.left = '10px';
+    buttonContainer.style.zIndex = 9999;
+    buttonContainer.style.backgroundColor = 'rgba(255, 255, 255, 0.9)'; 
+    buttonContainer.style.padding = '10px';
+    buttonContainer.style.borderRadius = '5px';
+    buttonContainer.style.boxShadow = '0 2px 5px rgba(0,0,0,0.3)';
+    buttonContainer.style.display = 'flex';
+    buttonContainer.style.gap = '10px';
+
+    const startButton = document.createElement('button');
+    startButton.innerText = 'Start Video';
+    startButton.id = 'start_video';
+    styleButton(startButton);
+    const stopButton = document.createElement('button');
+    stopButton.innerText = 'Stop Video';
+    stopButton.id = 'stop_video';
+    stopButton.disabled = true;
+    styleButton(stopButton);
+    
+    const zoomInButton = document.createElement('button');
+    zoomInButton.innerText = 'Zoom In';
+    styleButton(zoomInButton);
+    zoomInButton.addEventListener('click', () => zoomPage(0.1));
+
+    const zoomOutButton = document.createElement('button');
+    zoomOutButton.innerText = 'Zoom Out';
+    styleButton(zoomOutButton);
+    zoomOutButton.addEventListener('click', () => zoomPage(-0.1));
+
+    const contrastIncreaseButton = document.createElement('button');
+    contrastIncreaseButton.innerText = 'Increase Contrast';
+    styleButton(contrastIncreaseButton);
+    contrastIncreaseButton.addEventListener('click', () => {
+        contrastValue += 0.1;
+        changeContrast(contrastValue);
+    });
+
+    const contrastDecreaseButton = document.createElement('button');
+    contrastDecreaseButton.innerText = 'Decrease Contrast';
+    styleButton(contrastDecreaseButton);
+    contrastDecreaseButton.addEventListener('click', () => {
+        contrastValue = Math.max(0.5, contrastValue - 0.1);
+        changeContrast(contrastValue);
+    });
+
+    const bgColorInput = document.createElement('input');
+    bgColorInput.type = 'color';
+    bgColorInput.style.width = '50px';
+    bgColorInput.addEventListener('input', (event) => {
+        const color = event.target.value;
+        changeBackgroundColor(color);
+    });
+
+    buttonContainer.appendChild(startButton);
+    buttonContainer.appendChild(stopButton);
+    buttonContainer.appendChild(zoomInButton);
+    buttonContainer.appendChild(zoomOutButton);
+    buttonContainer.appendChild(contrastIncreaseButton);
+    buttonContainer.appendChild(contrastDecreaseButton);
+    buttonContainer.appendChild(bgColorInput);
+    document.body.appendChild(buttonContainer);
+
+    startButton.addEventListener('click', startRecording);
+    stopButton.addEventListener('click', stopRecording);
+
+}
+
+function styleButton(button) {
+    button.style.padding = '10px 15px';
+    button.style.border = 'none';
+    button.style.borderRadius = '5px';
+    button.style.cursor = 'pointer';
+    button.style.fontSize = '16px';
+    button.style.color = 'white';
+
+    if (button.id === 'start_video') {
+        button.style.backgroundColor = '#28a745'; 
+    } else if (button.id === 'stop_video') {
+        button.style.backgroundColor = '#dc3545'; 
+    }
+
+    button.onmouseover = () => {
+        button.style.opacity = '0.8';
+    };
+    button.onmouseout = () => {
+        button.style.opacity = '1';
+    };
+}
+
+async function startRecording() {
+    try {
+        const stream = await navigator.mediaDevices.getDisplayMedia({
+            video: true,
+            audio: true
+        });
+
+        mediaRecorder = new MediaRecorder(stream);
+
+        mediaRecorder.ondataavailable = event => {
+            if (event.data.size > 0) {
+                recordedChunks.push(event.data);
+            }
+        };
+        mediaRecorder.onstop = () => {
+            const blob = new Blob(recordedChunks, { type: 'video/webm' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'recorded-video.webm';
+            document.body.appendChild(a);
+            a.click(); 
+            document.body.removeChild(a); 
+
+            recordedChunks = [];
+        };
+
+        mediaRecorder.start();
+        document.getElementById('start_video').disabled = true;
+        document.getElementById('stop_video').disabled = false;
+    } catch (error) {
+        console.error('Error starting recording:', error);
+        alert('Could not start recording: ' + error.message);
+    }
+}
+
+function stopRecording() {
+    mediaRecorder.stop();
+    document.getElementById('start_video').disabled = false;
+    document.getElementById('stop_video').disabled = true;
+}
+
+window.addEventListener('load', () => {
+    createButtons();
+
+});

@@ -12,3 +12,8 @@ chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
     }
 });
   
+chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+    if (request.action === 'readContent') {
+      chrome.tts.speak(request.text, { rate: 1.0, pitch: 1.0, volume: 1.0 });
+    }
+  });
