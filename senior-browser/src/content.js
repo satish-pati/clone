@@ -303,11 +303,10 @@ const blurNegnews = () =>{
     const headlines = document.querySelectorAll(".n0jPhd.ynAwRc.MBeuO.nDgy9d");
     const newsDescription = document.querySelectorAll(".GI74Re.nDgy9d");
     const result = document.querySelectorAll('.iHxmLe'); 
-    const r3=document.querySelectorAll('.xe8e1b');
-    const result2 = document.querySelectorAll('.KYaZsb');
+      const result2 = document.querySelectorAll('.KYaZsb');
     const topHeadlines = document.querySelectorAll(".n0jPhd.ynAwRc.tNxQIb.nDgy9d"); 
     const topDescription = document.querySelectorAll(".SoAPf"); 
-    const allNewstext = [...headlines, ...newsDescription, ... topHeadlines, ...topDescription,...result,...result2,...r3];
+    const allNewstext = [...headlines, ...newsDescription, ... topHeadlines, ...topDescription,...result,...result2];
 
     allNewstext.forEach((box) => {
         const newsText = box.innerText;
