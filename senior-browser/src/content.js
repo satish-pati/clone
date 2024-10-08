@@ -1,5 +1,4 @@
-
-
+// List of negative words
 const Words = [
     "abuse", "accident", "aging", "alone", "anxiety", "apocalypse", "bad",
     "bankruptcy", "battle", "betrayal", "crisis", "death", "despair", "disaster",
@@ -55,7 +54,7 @@ const Words = [
     "social media addiction", "echo chamber", "polarization", "fake accounts", 
     "online scam", "hate speech", "trolling", "misrepresentation", "division", 
     "mob mentality", "toxic community", "deplatforming","dead","killed",
-    
+
     "aging", "dementia", "Alzheimer's", "arthritis", "osteoporosis", "chronic illness", 
     "heart disease", "stroke", "diabetes", "cancer", "hypertension", "hearing loss", 
     "vision loss", "depression", "mental illness", "anxiety", "chronic pain", 
@@ -90,8 +89,10 @@ const Words = [
     "neighborhood shooting", "plane crash", "train derailment", "industrial accident", 
     "workplace violence", "mass casualty", "armed conflict","attack" ,"murderer",
 ];
+// Initialize zoom and contrast values for page manipulation
 let zoomFactor = 1.0; 
 let contrastValue = 1.0; 
+// Function to change the background color of the webpage
 function changeBackgroundColor(color) {
     document.documentElement.style.setProperty('--bg-color', color); 
     const style = document.createElement('style');
@@ -106,20 +107,21 @@ function zoomPage(factorChange) {
     zoomFactor += factorChange;
     document.body.style.zoom = zoomFactor;
 }
-
 function changeContrast(contrast) {
-    document.body.style.filter = `contrast(${contrast})`;
+    document.body.style.filter = contrast`(${contrast})`;
 }
-
+// Function to hide negative content based on the predefined negative words
 function hideNegContent() {
+        // Select various elements that may contain negative information
+
   const results = document.querySelectorAll('.n0jPhd.ynAwRc.tNxQIb.nDgy9d, .SoAPf, .GI74Re.nDgy9d, .N54PNb,.N54PNb,article, h3, h4, h5, h6, .xrnccd, .VDXfz, .ZINbbc'); 
     results.forEach(res => {
         let hasNegWords = Words.some(word => {
-            const regx = new RegExp('\\b${word}\\b', 'gi');
-            return regx.test(res.innerText);
+            const regx = new RegExp(`\\b${word}\\b`, 'gi');// Create a regex for the word
+            return regx.test(res.innerText);// Test if the word is in the element's text
         });
-        if (hasNegWords) {
-            const prevtext = res.innerHTML;
+        if (hasNegWords) {// If negative words are found
+            const prevtext = res.innerHTML;// Store the original content
             res.innerHTML = `
                 <div class="negtextbox">
                   <strong>Website:</strong> <a href="${window.location.href}" target="_blank">${document.title}</a><br>
@@ -133,7 +135,6 @@ function hideNegContent() {
         }
     });
 }
-
 const styleboxes = document.createElement('style');
 styleboxes.innerHTML = `
     body {
@@ -178,6 +179,7 @@ window.onload = hideNegContent;
 const containsNegtext = (txt) => {
     return Words.some((word) => txt.toLowerCase().includes(word));
 };
+
 const blurNegnews = () =>{
     const headlines = document.querySelectorAll(".n0jPhd.ynAwRc.MBeuO.nDgy9d");
     const newsDescription = document.querySelectorAll(".GI74Re.nDgy9d");
@@ -417,4 +419,4 @@ function stopRecording() {
 window.addEventListener('load', () => {
     createButtons();
 
-}); 
+});
