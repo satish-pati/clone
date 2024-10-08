@@ -19,7 +19,6 @@
   ],
   "permissions": ["storage", "activeTab", "scripting", "declarativeNetRequest", "tts","tabCapture"],
   "host_permissions": ["https://www.google.com/*", "https://www.google.co.in/*","*://*.google.com/*"],
-  
   "web_accessible_resources": [
     {
       "resources": ["dist/*.css"],

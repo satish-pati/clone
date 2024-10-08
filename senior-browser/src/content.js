@@ -115,7 +115,7 @@ function hideNegContent() {
   const results = document.querySelectorAll('.n0jPhd.ynAwRc.tNxQIb.nDgy9d, .SoAPf, .GI74Re.nDgy9d, .N54PNb,.N54PNb,article, h3, h4, h5, h6, .xrnccd, .VDXfz, .ZINbbc'); 
     results.forEach(res => {
         let hasNegWords = Words.some(word => {
-            const regx = new RegExp(`\\b${word}\\b`, 'gi');
+            const regx = new RegExp('\\b${word}\\b', 'gi');
             return regx.test(res.innerText);
         });
         if (hasNegWords) {
@@ -219,6 +219,7 @@ function readPageContent() {
     topStoriesSection.forEach(section => {
         const hasNegativeWord = Words.some(word => {
             const regx = new RegExp(`\\b${word}\\b`, 'gi');
+
             return regx.test(section.innerText);
         });
 
