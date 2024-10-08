@@ -123,13 +123,13 @@ function injectButton() // For the start and stop buttons
 }
 function toggleButton(listening) 
 {
-    const toggleButtonbutton = document.getElementById("toggleBtn1");
+    const toggleButton = document.getElementById("toggleBtn1");
     if (listening) {
-        button.textContent = "Stop Listening";
-        button.style.backgroundColor = "red";
+        toggleButton.textContent = "Stop Listening";
+        toggleButton.style.backgroundColor = "red";
     }else {
-        button.textContent = "Start Listening";
-        button.style.backgroundColor = "green";
+        toggleButton.textContent = "Start Listening";
+        toggleButton.style.backgroundColor = "green";
     }
 }//To change the button color and text on clicking
 injectButton();
