@@ -1,18 +1,138 @@
-
-// List of negative words
-const Words = [
-    "abuse", "accident", "aging", "alone", "anxiety", "apocalypse", "bad",
-    "bankruptcy", "battle", "betrayal", "crisis", "death", "despair", "disaster",
-    "divorce", "doom", "doubt", "fear", "fired", "fraud", "gloom", "grief", "hate",
-    "hopeless", "injury", "isolation", "jeopardy", "loss", "murder", "neglect",
-    "pain", "panic", "paranoia", "regret", "riot", "robbery", "sad", "scam",
-    "scandal", "stress", "struggle", "suffering", "suicide", "terror", "tragedy",
-    "violence", "war", "worry", "end of the world", "catastrophic event",
-    "health crisis", "loneliness epidemic", "negative impact", "social isolation",
-    "mental breakdown", "financial ruin", "heartbreak", "unemployment rate rises",
-
-
-
+let recognition;
+let isListening = false;
+//Taking sppech from the Windows default Speech recogniser
+function startVoiceRecognition() {
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (!SpeechRecognition) 
+    {
+        console.error("Speech recognition is'nt supported by this browser.");
+        return;
+    }
+    recognition = new SpeechRecognition();
+    recognition.lang = 'en-US';// Here we are selecting English for now we will develop for Indian languages also
+    recognition.continuous = true;
+    recognition.interimResults = false;
+    recognition.onstart = () => 
+    {
+        console.log("Voice recognition has started.");
+        toggleButton(true);
+    };
+    recognition.onresult = (event) => 
+    {
+        const transcript = event.results[event.results.length - 1][0].transcript.trim().toLowerCase();
+        console.log('Recognized:', transcript);
+        handleVoiceCommand(transcript);
+    };
+    recognition.onerror = (event) => 
+    {
+        console.error("Recognition error:", event.error);
+        stopVoiceRecognition();
+    };
+    recognition.onend = () => 
+    {
+        console.log("Voice recognition has ended.");
+        toggleButton(false);
+    };
+    recognition.start();
+}
+function stopVoiceRecognition()// To stop the voice Recognition 
+{
+    if (recognition) 
+    {
+        recognition.stop();
+        console.log("Voice recognition is stopped by the user.");
+        toggleButton(false);
+    }
+}
+function handleVoiceCommand(command)// The inbuilt commands which will work
+{
+    if (command.includes('scroll down')) 
+    {
+        window.scrollBy(0, 500);
+    } 
+    else if (command.includes('scroll up')) 
+    {
+        window.scrollBy(0, -500);
+    } 
+    else if (command.includes('go back')) 
+    {
+        window.history.back();
+    } 
+    else if (command.includes('go forward'))
+    {
+        window.history.forward();
+    }
+    else if (command.includes('scroll to end')) 
+    {
+        window.scrollTo(0, document.body.scrollHeight);
+    } 
+    else if (command.includes('scroll to top')) 
+    {
+        window.scrollTo(0, 0);
+    } 
+    else if (command.includes('stop listening')) 
+    {
+        stopVoiceRecognition();
+        isListening = false;
+    }
+    else if (command.includes('new tab')) 
+    {
+        window.open('https://www.google.com/', '_blank');
+    }
+    else if (command.includes('open youtube')) 
+    {
+        window.open('https://www.youtube.com/');
+    } 
+    else if (command.includes('open facebook'))
+    {
+        window.open('https://www.facebook.com/');
+    }
+    else 
+    {
+        console.log("Unrecognized command:", command);
+    }
+}
+function injectButton() // For the start and stop buttons 
+{
+    const toggleButton = document.createElement("button");
+    toggleButton.id = "toggleBtn1";
+    toggleButton.textContent = "Start Listening";
+    toggleButton.style.position = "fixed";
+    toggleButton.style.bottom = "50px";
+    toggleButton.style.right = "50px";
+    toggleButton.style.zIndex = 10000;
+    toggleButton.style.padding = "10px";
+    toggleButton.style.backgroundColor = "green";
+    toggleButton.style.color = "white";
+    toggleButton.style.border = "none";
+    toggleButton.style.borderRadius = "5px";
+    toggleButton.style.cursor = "pointer";
+    document.body.appendChild(toggleButton);
+    toggleButton.addEventListener("click", () => {
+        //Action Listener for click to start and stop respectively
+        if (!isListening) 
+        {
+            startVoiceRecognition();
+            isListening = true;
+        } else 
+        {
+            stopVoiceRecognition();
+            isListening = false;
+        }
+    });
+}
+function toggleButton(listening) 
+{
+    const toggleButtonbutton = document.getElementById("toggleBtn1");
+    if (listening) {
+        button.textContent = "Stop Listening";
+        button.style.backgroundColor = "red";
+    }else {
+        button.textContent = "Start Listening";
+        button.style.backgroundColor = "green";
+    }
+}//To change the button color and text on clicking
+injectButton();
 // List of negative words
 const Words = [
     "abuse", "accident", "aging", "alone", "anxiety", "apocalypse", "bad",
@@ -105,26 +225,6 @@ const Words = [
     "workplace violence", "mass casualty", "armed conflict","attack" ,"murderer",
 ];
 // Initialize zoom and contrast values for page manipulation
-let zoomFactor = 1.0; 
-let contrastValue = 1.0; 
-// Function to change the background color of the webpage
-function changeBackgroundColor(color) {
-    document.documentElement.style.setProperty('--bg-color', color); 
-    const style = document.createElement('style');
-    style.innerHTML = `
-        * {
-            background-color: var(--bg-color) !important; /* Apply color to all elements */
-        }
-    `;
-    document.head.appendChild(style);
-}
-function zoomPage(factorChange) {
-    zoomFactor += factorChange;
-    document.body.style.zoom = zoomFactor;
-}
-function changeContrast(contrast) {
-    document.body.style.filter = `contrast(${contrast})`;
-}
 // Function to hide negative content based on the predefined negative words
 function hideNegContent() {
         // Select various elements that may contain negative information
@@ -143,13 +243,15 @@ function hideNegContent() {
                     <span>This content may contain negative information.</span><br>
                     <button class="showcontent">Show Content</button>
                 </div>`;
+                // Add an event listener to the button to show the original content
      res.querySelector('.showcontent').addEventListener('click', function () {
-                res.innerHTML = prevtext ; 
+                res.innerHTML = prevtext ; // Restore original content
             });
-            res.classList.add('negative-content-processed');
+            res.classList.add('negative-content-processed');//processed neg text
         }
     });
 }
+// Create and append CSS styles for the page
 const styleboxes = document.createElement('style');
 styleboxes.innerHTML = `
     body {
@@ -191,10 +293,12 @@ const positiveMsg = document.createElement('div');
 positiveMsg.className = 'postivetext';
 document.body.prepend(positiveMsg);
 window.onload = hideNegContent;
+// Function to check if a text contains any negative words
+
 const containsNegtext = (txt) => {
     return Words.some((word) => txt.toLowerCase().includes(word));
 };
-
+// Function to blur news articles that contain negative words
 const blurNegnews = () =>{
     const headlines = document.querySelectorAll(".n0jPhd.ynAwRc.MBeuO.nDgy9d");
     const newsDescription = document.querySelectorAll(".GI74Re.nDgy9d");
@@ -294,60 +398,66 @@ window.addEventListener('load', () => {
     document.body.appendChild(button);
 });
 
-let mediaRecorder;
+let zoomFactor = 1.0;
+let contrastValue = 1.0;
+let mediaRecorder; 
 let recordedChunks = [];
+
+function changeBackgroundColor(color) {
+    document.documentElement.style.setProperty('--bg-color', color); 
+    const style = document.createElement('style');
+    style.innerHTML = `
+        * {
+            background-color: var(--bg-color) !important;
+        }
+    `;
+    document.head.appendChild(style);
+}
+
+function zoomPage(factorChange) {
+    zoomFactor += factorChange;
+    document.body.style.zoom = zoomFactor;
+}
+
+function changeContrast(contrast) {
+    document.body.style.filter = `contrast(${contrast})`;
+}
+
 function createButtons() {
     const buttonContainer = document.createElement('div');
+    buttonContainer.id = 'feature-buttons'; 
     buttonContainer.style.position = 'fixed';
-    buttonContainer.style.top = '10px';
+    buttonContainer.style.top = '50px'; 
     buttonContainer.style.left = '10px';
     buttonContainer.style.zIndex = 9999;
-    buttonContainer.style.backgroundColor = 'rgba(255, 255, 255, 0.9)'; 
+    buttonContainer.style.backgroundColor = 'rgba(255, 255, 255, 0.9)';
     buttonContainer.style.padding = '10px';
     buttonContainer.style.borderRadius = '5px';
     buttonContainer.style.boxShadow = '0 2px 5px rgba(0,0,0,0.3)';
-    buttonContainer.style.display = 'flex';
-    buttonContainer.style.gap = '10px';
+    buttonContainer.style.display = 'none'; 
+    buttonContainer.style.display = 'grid';
+    buttonContainer.style.gridTemplateColumns = 'repeat(3, 1fr)';
+    buttonContainer.style.gridGap = '10px';
 
-    const startButton = document.createElement('button');
-    startButton.innerText = 'Start Video';
-    startButton.id = 'start_video';
-    styleButton(startButton);
-    const stopButton = document.createElement('button');
-    stopButton.innerText = 'Stop Video';
-    stopButton.id = 'stop_video';
-    stopButton.disabled = true;
-    styleButton(stopButton);
-    
-    const zoomInButton = document.createElement('button');
-    zoomInButton.innerText = 'Zoom In';
-    styleButton(zoomInButton);
+    const startButton = createButtonWithImage('Start Video', 'start_video');
+    const stopButton = createButtonWithImage('Stop Video', 'stop_video', true);
+    const zoomInButton = createButtonWithImage('Zoom In', null);
+    const zoomOutButton = createButtonWithImage('Zoom Out', null);
+    const contrastIncreaseButton = createButtonWithImage('Increase Contrast', null);
+    const contrastDecreaseButton = createButtonWithImage('Decrease Contrast', null);
+    const bgColorInput = createButtonWithImage('Change BG Color', null, 'color.png', false, true);
+
     zoomInButton.addEventListener('click', () => zoomPage(0.1));
-
-    const zoomOutButton = document.createElement('button');
-    zoomOutButton.innerText = 'Zoom Out';
-    styleButton(zoomOutButton);
     zoomOutButton.addEventListener('click', () => zoomPage(-0.1));
-
-    const contrastIncreaseButton = document.createElement('button');
-    contrastIncreaseButton.innerText = 'Increase Contrast';
-    styleButton(contrastIncreaseButton);
     contrastIncreaseButton.addEventListener('click', () => {
         contrastValue += 0.1;
         changeContrast(contrastValue);
     });
-
-    const contrastDecreaseButton = document.createElement('button');
-    contrastDecreaseButton.innerText = 'Decrease Contrast';
-    styleButton(contrastDecreaseButton);
     contrastDecreaseButton.addEventListener('click', () => {
         contrastValue = Math.max(0.5, contrastValue - 0.1);
         changeContrast(contrastValue);
     });
 
-    const bgColorInput = document.createElement('input');
-    bgColorInput.type = 'color';
-    bgColorInput.style.width = '50px';
     bgColorInput.addEventListener('input', (event) => {
         const color = event.target.value;
         changeBackgroundColor(color);
@@ -360,11 +470,33 @@ function createButtons() {
     buttonContainer.appendChild(contrastIncreaseButton);
     buttonContainer.appendChild(contrastDecreaseButton);
     buttonContainer.appendChild(bgColorInput);
+
     document.body.appendChild(buttonContainer);
 
     startButton.addEventListener('click', startRecording);
     stopButton.addEventListener('click', stopRecording);
+}
+function createButtonWithImage(text, id, imageSrc, isDisabled = false, isInput = false) {
+    const button = document.createElement('button');
+    if (isInput) {
+        button.style.padding = '0';
+    }
+    button.style.display = 'flex';
+    button.style.flexDirection = 'column';
+    button.style.alignItems = 'center';
+    if (!isInput) {
+        const span = document.createElement('span');
+        span.innerText = text;
+        button.appendChild(span);
+        styleButton(button);
+    } else {
+        button.style.backgroundColor = 'rgba(255, 255, 255, 0)';
+        button.innerHTML = `<input type="color" style="width: 50px; height: 50px;">`;
+    }
 
+    if (id) button.id = id;
+    if (isDisabled) button.disabled = true;
+    return button;
 }
 
 function styleButton(button) {
@@ -389,6 +521,27 @@ function styleButton(button) {
     };
 }
 
+function toggleFeatures() {
+    const buttonContainer = document.getElementById('feature-buttons');
+    buttonContainer.style.display = buttonContainer.style.display === 'none' ? 'grid' : 'none';
+}
+
+function createMainButton() {
+    const mainButton = document.createElement('button');
+    mainButton.innerText = 'Show Features';
+    mainButton.id = 'main_button';
+    styleButton(mainButton);
+
+    mainButton.style.position = 'fixed';
+    mainButton.style.top = '10px';
+    mainButton.style.left = '10px';
+    mainButton.style.zIndex = 10000;
+
+    mainButton.addEventListener('click', toggleFeatures);
+
+    document.body.appendChild(mainButton);
+}
+
 async function startRecording() {
     try {
         const stream = await navigator.mediaDevices.getDisplayMedia({
@@ -403,6 +556,7 @@ async function startRecording() {
                 recordedChunks.push(event.data);
             }
         };
+
         mediaRecorder.onstop = () => {
             const blob = new Blob(recordedChunks, { type: 'video/webm' });
             const url = URL.createObjectURL(blob);
@@ -410,8 +564,8 @@ async function startRecording() {
             a.href = url;
             a.download = 'recorded-video.webm';
             document.body.appendChild(a);
-            a.click(); 
-            document.body.removeChild(a); 
+            a.click();
+            document.body.removeChild(a);
 
             recordedChunks = [];
         };
@@ -432,50 +586,9 @@ function stopRecording() {
 }
 
 window.addEventListener('load', () => {
-    createButtons();
-
-}); 
-
-
+    createMainButton();
+    createButtons(); 
+});
 
 
 
-    "recession", "inflation", "debt crisis", "stock market crash", "economic collapse", 
-    "job cuts", "layoffs", "corruption", "political unrest", "protests", 
-    "civil war", "coup", "sanctions", "government collapse", "oppression", 
-    "discrimination", "hate crime", "genocide", "human trafficking", "war crime", 
-    "famine", "drought", "refugee crisis", "displacement", "forced migration","raped","attack",
-
-    
-     "global warming", "natural disaster", "earthquake", "tsunami", 
-    "flood", "hurricane", "wildfire", "volcanic eruption", "oil spill", 
-    "deforestation", "biodiversity loss", "extinction", "habitat destruction", 
-    "pollution", "ozone depletion", "acid rain", "environmental degradation", 
-    "melting glaciers", "rising sea levels", "water scarcity", "fossil fuel dependency","crime",
-    
-    "pandemic", "epidemic", "outbreak", "disease", "infection", "virus", "cancer", 
-    "cholera", "Ebola", "HIV", "AIDS", "malaria", "influenza", "fever", 
-    "chronic illness", "mental illness", "depression", "PTSD", "self-harm", 
-    "overdose", "substance abuse", "addiction", "drug trafficking", "alcoholism", 
-    "obesity crisis", "malnutrition", "public health emergency", "healthcare crisis",
-    
-    
-    "poverty", "homelessness", "income inequality", "racial injustice", 
-    "gender inequality", "child labor", "domestic violence", "sexual harassment", 
-    "slavery", "mass incarceration", "police brutality", "displacement", 
-    "refugee camps", "detention centers", "broken justice system", 
-    "youth unemployment", "crime wave", "gun violence", "school shootings", 
-    "assault", "sexual assault", "terrorism", "radicalization", "human rights violations",
-    
-    "desperation", "hopelessness", "frustration", "helplessness", "rejection", 
-    "loneliness", "worthlessness", "despondency", "shame", "guilt", "misery", 
-    "anguish", "grief", "sorrow", "self-doubt", "insecurity", "abandonment", 
-    "breakdown", "emotional turmoil", "trauma", "post-traumatic stress", 
-    "fear of failure", "low self-esteem", "identity crisis", "existential crisis",
-    
-    "arms race", "military conflict", "bombing", "airstrike", "missile attack", 
-    "occupation", "invasion", "terror cell", "genocide", "nuclear war", 
-    "chemical attack", "biological weapons", "massacre", "hostage situation", 
-    "insurgency", "guerilla warfare", "siege", "peace talks fail", "refugee exodus",
-    
-    "cancel culture", "outrage", "online backlash", "doxxing", "public shaming", 
