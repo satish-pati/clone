@@ -12,7 +12,7 @@
   "content_scripts": [
     {
      "matches": ["<all_urls>"],
-      "js": ["src/content.js"],
+      "js": ["src/modules/font.js","src/modules/detoxSearch.js","src/modules/Screenrecorder.js","src/modules/ScreenReader.js","src/modules/Buttons.js","src/modules/voice.js","src/content.js"],
       "run_at": "document_end",
       "css": ["public/popup.css"] 
     }
@@ -21,7 +21,7 @@
   "host_permissions": ["https://www.google.com/*", "https://www.google.co.in/*","*://*.google.com/*"],
   "web_accessible_resources": [
     {
-      "resources": ["public/popup.css"],
+      "resources": ["public/popup.css","src/modules/font.js","src/modules/detoxSearch.js","src/modules/Screenrecorder.js","src/modules/ScreenReader.js","src/modules/Buttons.js","src/modules/voice.js","src/content.js"],
       "matches": ["<all_urls>"]
     }
   ]

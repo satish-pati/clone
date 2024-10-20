@@ -1,3 +1,4 @@
+// List of negative words
 const Words = [
     "abuse", "accident", "aging", "alone", "anxiety", "apocalypse", "bad",
     "bankruptcy", "battle", "betrayal", "crisis", "death", "despair", "disaster",
@@ -88,12 +89,43 @@ const Words = [
     "neighborhood shooting", "plane crash", "train derailment", "industrial accident", 
     "workplace violence", "mass casualty", "armed conflict","attack" ,"murderer",
 ];
-// Initialize zoom and contrast values for page manipulation
-// Function to hide negative content based on the predefined negative words
+
+// Function to blur news articles that contain negative words
+const blurNegnews = () =>{
+    const headlines = document.querySelectorAll(".n0jPhd.ynAwRc.MBeuO.nDgy9d");
+    const newsDescription = document.querySelectorAll(".GI74Re.nDgy9d");
+    const result = document.querySelectorAll('.iHxmLe'); 
+      const result2 = document.querySelectorAll('.KYaZsb');
+    const topHeadlines = document.querySelectorAll(".n0jPhd.ynAwRc.tNxQIb.nDgy9d"); 
+    const topDescription = document.querySelectorAll(".SoAPf"); 
+    const allNewstext = [...headlines, ...newsDescription, ... topHeadlines, ...topDescription,...result,...result2];
+
+    allNewstext.forEach((box) => {
+        const newsText = box.innerText;
+        if (containsNegtext(newsText)) {
+            box.style.filter = "blur(8px)";
+            box.style.transition = "filter 0.3s ease";
+            const showButton = document.createElement("button");
+            showButton.innerText = "Show Content";
+            showButton.style.display = "block";
+            showButton.style.margin = "10px auto";
+            showButton.style.padding = "8px 16px";
+            showButton.style.fontSize = "14px";
+            showButton.style.cursor = "pointer";
+            showButton.addEventListener("click", () => {
+                box.style.filter = "none";  
+                showButton.style.display = "none"; 
+            });
+            box.parentElement.appendChild(showButton); 
+        }
+    });
+};
+//window.addEventListener('load', blurNegnews );
+// Function to hide negative content based on the negative words
 function hideNegContent() {
         // Select various elements that may contain negative information
-
-  const results = document.querySelectorAll('.n0jPhd.ynAwRc.tNxQIb.nDgy9d, .SoAPf, .GI74Re.nDgy9d, .N54PNb,.N54PNb,article, h3, h4, h5, h6, .xrnccd, .VDXfz, .ZINbbc'); 
+  //const results = document.querySelectorAll('.n0jPhd.ynAwRc.tNxQIb.nDgy9d, .SoAPf, .GI74Re.nDgy9d, .N54PNb,.N54PNb,article, h3, h4, h5, h6, .xrnccd, .VDXfz, .ZINbbc'); 
+  const results = document.querySelectorAll(' .N54PNb,.N54PNb,article, h3, h4, h5, h6, .xrnccd, .VDXfz, .ZINbbc'); 
     results.forEach(res => {
         let hasNegWords = Words.some(word => {
             const regx = new RegExp(`\\b${word}\\b`, 'gi');// Create a regex for the word
@@ -115,7 +147,7 @@ function hideNegContent() {
         }
     });
 }
-// Create and append CSS styles for the page
+// Create and append  styles for the page
 const styleboxes = document.createElement('style');
 styleboxes.innerHTML = `
     body {
@@ -156,41 +188,9 @@ document.head.appendChild(styleboxes);
 const positiveMsg = document.createElement('div');
 positiveMsg.className = 'postivetext';
 document.body.prepend(positiveMsg);
-window.onload = hideNegContent;
+//window.onload = hideNegContent;
 // Function to check if a text contains any negative words
 
 const containsNegtext = (txt) => {
     return Words.some((word) => txt.toLowerCase().includes(word));
 };
-// Function to blur news articles that contain negative words
-const blurNegnews = () =>{
-    const headlines = document.querySelectorAll(".n0jPhd.ynAwRc.MBeuO.nDgy9d");
-    const newsDescription = document.querySelectorAll(".GI74Re.nDgy9d");
-    const result = document.querySelectorAll('.iHxmLe'); 
-
-    const result2 = document.querySelectorAll('.KYaZsb');
-    const topHeadlines = document.querySelectorAll(".n0jPhd.ynAwRc.tNxQIb.nDgy9d"); 
-    const topDescription = document.querySelectorAll(".SoAPf"); 
-    const allNewstext = [...headlines, ...newsDescription, ... topHeadlines, ...topDescription,...result,...result2];
-
-    allNewstext.forEach((box) => {
-        const newsText = box.innerText;
-        if (containsNegtext(newsText)) {
-            box.style.filter = "blur(8px)";
-            box.style.transition = "filter 0.3s ease";
-            const showButton = document.createElement("button");
-            showButton.innerText = "Show Content";
-            showButton.style.display = "block";
-            showButton.style.margin = "10px auto";
-            showButton.style.padding = "8px 16px";
-            showButton.style.fontSize = "14px";
-            showButton.style.cursor = "pointer";
-            showButton.addEventListener("click", () => {
-                box.style.filter = "none";  
-                showButton.style.display = "none"; 
-            });
-            box.parentElement.appendChild(showButton); 
-        }
-    });
-};
-window.addEventListener('load', blurNegnews );
