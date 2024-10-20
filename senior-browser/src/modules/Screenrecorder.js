@@ -108,9 +108,5 @@ function stopRecording() {
     document.getElementById('stop_video').disabled = true;
 }
 
-window.addEventListener('load', () => {
-    createMainButton();
-    createButtons(); 
-});
 
 
