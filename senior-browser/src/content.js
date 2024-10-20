@@ -1,3 +1,5 @@
+//import { setupReadButton } from './modules/ScreenReader.js'
+
 let recognition;
 let isListening = false;
 //Taking sppech from the Windows default Speech recogniser
@@ -224,12 +226,43 @@ const Words = [
     "neighborhood shooting", "plane crash", "train derailment", "industrial accident", 
     "workplace violence", "mass casualty", "armed conflict","attack" ,"murderer",
 ];
-// Initialize zoom and contrast values for page manipulation
-// Function to hide negative content based on the predefined negative words
+
+// Function to blur news articles that contain negative words
+const blurNegnews = () =>{
+    const headlines = document.querySelectorAll(".n0jPhd.ynAwRc.MBeuO.nDgy9d");
+    const newsDescription = document.querySelectorAll(".GI74Re.nDgy9d");
+    const result = document.querySelectorAll('.iHxmLe'); 
+      const result2 = document.querySelectorAll('.KYaZsb');
+    const topHeadlines = document.querySelectorAll(".n0jPhd.ynAwRc.tNxQIb.nDgy9d"); 
+    const topDescription = document.querySelectorAll(".SoAPf"); 
+    const allNewstext = [...headlines, ...newsDescription, ... topHeadlines, ...topDescription,...result,...result2];
+
+    allNewstext.forEach((box) => {
+        const newsText = box.innerText;
+        if (containsNegtext(newsText)) {
+            box.style.filter = "blur(8px)";
+            box.style.transition = "filter 0.3s ease";
+            const showButton = document.createElement("button");
+            showButton.innerText = "Show Content";
+            showButton.style.display = "block";
+            showButton.style.margin = "10px auto";
+            showButton.style.padding = "8px 16px";
+            showButton.style.fontSize = "14px";
+            showButton.style.cursor = "pointer";
+            showButton.addEventListener("click", () => {
+                box.style.filter = "none";  
+                showButton.style.display = "none"; 
+            });
+            box.parentElement.appendChild(showButton); 
+        }
+    });
+};
+//window.addEventListener('load', blurNegnews );
+// Function to hide negative content based on the negative words
 function hideNegContent() {
         // Select various elements that may contain negative information
-
-  const results = document.querySelectorAll('.n0jPhd.ynAwRc.tNxQIb.nDgy9d, .SoAPf, .GI74Re.nDgy9d, .N54PNb,.N54PNb,article, h3, h4, h5, h6, .xrnccd, .VDXfz, .ZINbbc'); 
+  //const results = document.querySelectorAll('.n0jPhd.ynAwRc.tNxQIb.nDgy9d, .SoAPf, .GI74Re.nDgy9d, .N54PNb,.N54PNb,article, h3, h4, h5, h6, .xrnccd, .VDXfz, .ZINbbc'); 
+  const results = document.querySelectorAll(' .N54PNb,.N54PNb,article, h3, h4, h5, h6, .xrnccd, .VDXfz, .ZINbbc'); 
     results.forEach(res => {
         let hasNegWords = Words.some(word => {
             const regx = new RegExp(`\\b${word}\\b`, 'gi');// Create a regex for the word
@@ -251,7 +284,7 @@ function hideNegContent() {
         }
     });
 }
-// Create and append CSS styles for the page
+// Create and append  styles for the page
 const styleboxes = document.createElement('style');
 styleboxes.innerHTML = `
     body {
@@ -292,43 +325,47 @@ document.head.appendChild(styleboxes);
 const positiveMsg = document.createElement('div');
 positiveMsg.className = 'postivetext';
 document.body.prepend(positiveMsg);
-window.onload = hideNegContent;
+//window.onload = hideNegContent;
 // Function to check if a text contains any negative words
 
 const containsNegtext = (txt) => {
     return Words.some((word) => txt.toLowerCase().includes(word));
 };
-// Function to blur news articles that contain negative words
-const blurNegnews = () =>{
-    const headlines = document.querySelectorAll(".n0jPhd.ynAwRc.MBeuO.nDgy9d");
-    const newsDescription = document.querySelectorAll(".GI74Re.nDgy9d");
-    const result = document.querySelectorAll('.iHxmLe'); 
-      const result2 = document.querySelectorAll('.KYaZsb');
-    const topHeadlines = document.querySelectorAll(".n0jPhd.ynAwRc.tNxQIb.nDgy9d"); 
-    const topDescription = document.querySelectorAll(".SoAPf"); 
-    const allNewstext = [...headlines, ...newsDescription, ... topHeadlines, ...topDescription,...result,...result2];
+// Add a button to toggle detox search
+const toggleButto= document.createElement('button');
+toggleButto.innerText = 'Detox Search: OFF';
+toggleButto.style.position = 'fixed';
+toggleButto.style.top = '250px';
+toggleButto.style.right = '10px';
+toggleButto.style.padding = '10px 20px';
+toggleButto.style.backgroundColor = '#add8e6';
+toggleButto.style.color = '#fff';
+toggleButto.style.border = 'none';
+toggleButto.style.borderRadius = '5px';
+toggleButto.style.cursor = 'pointer';
+document.body.appendChild(toggleButto);
+//toggleButto.innerText = 'Detox Search: ON';
+let isDetoxSearchOn = false; // Initially, detox search is off
+toggleButto.addEventListener('click', () => {
+    isDetoxSearchOn = !isDetoxSearchOn;
+    toggleButto.innerText = isDetoxSearchOn ? 'Detox Search: ON' : 'Detox Search: OFF';
+    if (isDetoxSearchOn) {
+        blurNegnews();
+        hideNegContent();
+    } else {
+        location.reload(); // Reload the page to reset the normal content
+    }
+});
 
-    allNewstext.forEach((box) => {
-        const newsText = box.innerText;
-        if (containsNegtext(newsText)) {
-            box.style.filter = "blur(8px)";
-            box.style.transition = "filter 0.3s ease";
-            const showButton = document.createElement("button");
-            showButton.innerText = "Show Content";
-            showButton.style.display = "block";
-            showButton.style.margin = "10px auto";
-            showButton.style.padding = "8px 16px";
-            showButton.style.fontSize = "14px";
-            showButton.style.cursor = "pointer";
-            showButton.addEventListener("click", () => {
-                box.style.filter = "none";  
-                showButton.style.display = "none"; 
-            });
-            box.parentElement.appendChild(showButton); 
-        }
-    });
-};
-window.addEventListener('load', blurNegnews );
+//  detox search is only applied when the toggle is ON
+window.addEventListener('load', () => {
+    if (isDetoxSearchOn) {
+        blurNegnews();
+        hideNegContent();
+    }
+});
+
+
 let isReading = false; // variable to track reading state
 
 // Function to read the page content
@@ -373,7 +410,7 @@ function stopReading() {
 const button = document.createElement('button');
 button.textContent = 'Read Content';
 button.style.position = 'fixed';
-button.style.top = '10px';
+button.style.top = '200px';
 button.style.right = '10px';
 button.style.zIndex = '9999'; 
 button.style.backgroundColor = '#4CAF50';
@@ -396,7 +433,7 @@ button.addEventListener('click', () => {
 window.addEventListener('load', () => {
     document.body.appendChild(button);
 });
-
+//setupReadButton();
 let zoomFactor = 1.0;
 let contrastValue = 1.0;
 let mediaRecorder; 
@@ -588,6 +625,25 @@ window.addEventListener('load', () => {
     createMainButton();
     createButtons(); 
 });
+// content.js
+// Inject the button for font settings
+const button2 = document.createElement('button');
+button2.id = 'fontSettingsBtn';
+button2.innerText = 'Adjust Font Settings';
+button2.style.position = 'fixed';
+button2.style.bottom = '20px';
+button2.style.right = '20px';
+button2.style.padding = '10px 20px';
+button2.style.fontSize = '16px';
+button2.style.zIndex = '9999';
+button2.style.backgroundColor = '#007bff';
+button2.style.color = '#fff';
+button2.style.border = 'none';
+button2.style.borderRadius = '5px';
+button2.style.cursor = 'pointer';
+document.body.appendChild(button2);
 
-
-
+// Load the font settings modal when the button is clicked
+button2.addEventListener('click', () => {
+    loadFontSettingsModal();
+});
