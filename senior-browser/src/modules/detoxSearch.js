@@ -194,3 +194,28 @@ document.body.prepend(positiveMsg);
 const containsNegtext = (txt) => {
     return Words.some((word) => txt.toLowerCase().includes(word));
 };
+// Add a button to toggle detox search
+const toggleButto= document.createElement('button');
+toggleButto.innerText = 'Detox Search: OFF';
+toggleButto.style.position = 'fixed';
+toggleButto.style.top = '100px';
+toggleButto.style.right = '10px';
+toggleButto.style.padding = '10px 20px';
+toggleButto.style.backgroundColor = '#add8e6';
+toggleButto.style.color = '#fff';
+toggleButto.style.border = 'none';
+toggleButto.style.borderRadius = '5px';
+toggleButto.style.cursor = 'pointer';
+document.body.appendChild(toggleButto);
+//toggleButto.innerText = 'Detox Search: ON';
+let isDetoxSearchOn = false; // Initially, detox search is off
+toggleButto.addEventListener('click', () => {
+    isDetoxSearchOn = !isDetoxSearchOn;
+    toggleButto.innerText = isDetoxSearchOn ? 'Detox Search: ON' : 'Detox Search: OFF';
+    if (isDetoxSearchOn) {
+        blurNegnews();
+        hideNegContent();
+    } else {
+        location.reload(); // Reload the page to reset the normal content
+    }
+});
