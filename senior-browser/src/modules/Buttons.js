@@ -35,7 +35,6 @@ function createButtons() {
     buttonContainer.style.borderRadius = '5px';
     buttonContainer.style.boxShadow = '0 2px 5px rgba(0,0,0,0.3)';
     buttonContainer.style.display = 'none'; 
-    buttonContainer.style.display = 'grid';
     buttonContainer.style.gridTemplateColumns = 'repeat(3, 1fr)';
     buttonContainer.style.gridGap = '10px';
 
