@@ -16,21 +16,21 @@ window.addEventListener('load', () => {
     createButtons(); 
 });
 // Inject the button for font settings
-const button2 = document.createElement('button');
-button2.id = 'fontSettingsBtn';
-button2.innerText = 'Adjust Font Settings';
-button2.style.position = 'fixed';
-button2.style.top = '140px';
-button2.style.right = '20px';
-button2.style.padding = '10px 20px';
-button2.style.fontSize = '16px';
-button2.style.zIndex = '9999';
-button2.style.backgroundColor = '#007bff';
-button2.style.color = '#fff';
-button2.style.border = 'none';
-button2.style.borderRadius = '5px';
-button2.style.cursor = 'pointer';
-document.body.appendChild(button2);
+const button3 = document.createElement('button');
+button3.id = 'fontSettingsBtn';
+button3.innerText = 'Adjust Font Settings';
+button3.style.position = 'fixed';
+button3.style.top = '140px';
+button3.style.right = '20px';
+button3.style.padding = '10px 20px';
+button3.style.fontSize = '16px';
+button3.style.zIndex = '9999';
+button3.style.backgroundColor = '#007bff';
+button3.style.color = '#fff';
+button3.style.border = 'none';
+button3.style.borderRadius = '5px';
+button3.style.cursor = 'pointer';
+document.body.appendChild(button3);
 // Load the font settings modal when the button is clicked
 button2.addEventListener('click', () => {
     loadFontSettingsModal();
