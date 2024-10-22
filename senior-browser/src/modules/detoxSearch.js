@@ -190,7 +190,6 @@ positiveMsg.className = 'postivetext';
 document.body.prepend(positiveMsg);
 //window.onload = hideNegContent;
 // Function to check if a text contains any negative words
-
 const containsNegtext = (txt) => {
     return Words.some((word) => txt.toLowerCase().includes(word));
 };
