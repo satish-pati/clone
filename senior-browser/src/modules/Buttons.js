@@ -105,7 +105,7 @@ function toggleFeatures() {
 
 function createMainButton() {
     const mainButton = document.createElement('button');
-    mainButton.innerText = 'Show Features';
+    mainButton.innerText = 'Accessibility';
     mainButton.id = 'main_button';
     styleButton(mainButton);
 
