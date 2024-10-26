@@ -190,7 +190,8 @@ button.style.padding = '10px';
 button.style.cursor = 'pointer';
 button.style.borderRadius = '5px';
 button.style.fontSize = '14px';
-document.body.appendChild(button);
+//document.body.appendChild(button);
+featureContainer.appendChild(button);
 
 button.addEventListener('click', () => {
     if (isReading) {
