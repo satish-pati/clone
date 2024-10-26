@@ -107,6 +107,3 @@ function stopRecording() {
     document.getElementById('start_video').disabled = false;
     document.getElementById('stop_video').disabled = true;
 }
-
-
-
