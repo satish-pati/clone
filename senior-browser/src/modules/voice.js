@@ -127,7 +127,7 @@ function toggleButton(listening)
     if (listening) {
         toggleButton.textContent = "Stop Listening";
         toggleButton.style.backgroundColor = "red";
-    }else {
+    }else{
         toggleButton.textContent = "Start Listening";
         toggleButton.style.backgroundColor = "green";
     }
