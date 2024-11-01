@@ -102,7 +102,6 @@ function toggleFeatures() {
     const buttonContainer = document.getElementById('feature-buttons');
     buttonContainer.style.display = buttonContainer.style.display === 'none' ? 'grid' : 'none';
 }
-w
 function createMainButton() {
     const mainButton = document.createElement('button');
     mainButton.innerText = 'Accessibility';
