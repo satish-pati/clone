@@ -8,20 +8,26 @@
   },
   "background": {
     "service_worker": "src/background.js"
+    
   },
   "content_scripts": [
     {
-     "matches": ["<all_urls>"],
-      "js": ["src/modules/font.js","src/modules/detoxSearch.js","src/modules/Screenrecorder.js","src/modules/ScreenReader.js","src/modules/Buttons.js","src/modules/voice.js","src/content.js"],
+     "matches": ["https://www.google.com/*","<all_urls>"],
+      "js": ["src/modules/font.js","src/modules/detoxSearch.js","src/modules/Screenrecorder.js","src/modules/ScreenReader.js","src/modules/Buttons.js","src/modules/voice.js","src/button.js","src/content.js","src/modules/ads.js","src/modules/videoTutorials.js","src/modules/download.js"],
       "run_at": "document_end",
       "css": ["public/popup.css"] 
     }
   ],
-  "permissions": ["storage", "activeTab", "scripting", "declarativeNetRequest", "tts","tabCapture"],
-  "host_permissions": ["https://www.google.com/*", "https://www.google.co.in/*","*://*.google.com/*"],
+  "permissions": ["<all_urls>","storage", "activeTab", "scripting", "declarativeNetRequest", "tts","tabCapture", "tabs","history","http://localhost:3000/*"],
+  "host_permissions": ["https://www.google.com/*", "https://www.google.co.in/*","*://*.google.com/*","https://*.youtube.com/*","file:///*","http://localhost:3000/*"
+ 
+],
   "web_accessible_resources": [
     {
-      "resources": ["public/popup.css","src/modules/font.js","src/modules/detoxSearch.js","src/modules/Screenrecorder.js","src/modules/ScreenReader.js","src/modules/Buttons.js","src/modules/voice.js","src/content.js"],
+      "resources": ["script.js","public/popup.css","src/modules/font.js","src/modules/detoxSearch.js","src/modules/Screenrecorder.js","src/modules/ScreenReader.js","src/modules/Buttons.js","src/modules/voice.js","src/content.js", "assets/bookmark.png","src/modules/ads.js",
+      "assets/play.png",
+      "assets/delete.png",
+      "assets/save.png","history.html", "history.js","public/login.html", "public/register.html", "public/restricted.html", "src/auth.js","src/video.html","src/modules/videoTutorials.js"],
       "matches": ["<all_urls>"]
     }
   ]
