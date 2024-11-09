@@ -2,10 +2,10 @@
 const videoButton = document.createElement('button');
 videoButton.innerText = 'Video Tutorials';
 videoButton.style.position = 'fixed';
-videoButton.style.bottom = '20px';
+videoButton.style.top = '50px';
 videoButton.style.right = '20px';
 videoButton.style.padding = '10px 20px';
-videoButton.style.backgroundColor = '#4CAF50';
+//videoButton.style.backgroundColor = '#4CAF50';
 videoButton.style.color = 'white';
 videoButton.style.border = 'none';
 videoButton.style.cursor = 'pointer';
@@ -13,14 +13,14 @@ document.body.appendChild(videoButton);
 
 videoButton.addEventListener('click', async function () {
     try {
-        const response = await fetch('http://localhost:3000/videos');
+        const response = await fetch('https://render-nl4l.onrender.com/videos');
         const videos = await response.json();
 
         if (videos && videos.length > 0) {
             if (!window.location.href.includes('google.com')) {
                 showVideoModal(videos);
             } else {
-               //window.location.href = '/video.html'
+              // window.location.href = '/video.html'
                // chrome.tabs.create({ url: chrome.runtime.getURL("src/video.html") });
                showVideoModal(videos);
             }
