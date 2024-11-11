@@ -33,7 +33,9 @@ Benefits for Senior Citizens:
 •	Improved engagement
 6)	The bookmark feature allows users to include a timestamp, making it easy to jump to particular moments.
 Benefits for Senior Citizens:
-•	Ease of Navigation
+•	Ease of Navigation![image_0](https://github.com/user-attachments/assets/97f4d517-9be4-4286-938b-0816a4ac3e9e)
+![Uploading image_0.jpg…]()
+
 •	Reduced Anxiety
      
 
