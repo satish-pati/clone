@@ -23,7 +23,7 @@ function checkLoginBeforeFeatureAccess(featureCallback) {
       featureCallback();
     } else {
       // Redirect to login page
-      window.location.href = chrome.runtime.getURL("public/login.html");
+     // window.location.href = chrome.runtime.getURL("public/login.html");
     }
   });
 }
