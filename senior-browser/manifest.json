@@ -1,16 +1,26 @@
 {
-  "name": "My YT Bookmarks",
+  "name": "Golden Agers Browser",
   "version": "0.1.0",
   "description": "Saving timestamps in YT videos",
-  "permissions": ["storage", "tabs", "activeTab"],
-  "host_permissions": ["https://*.youtube.com/*"],
+  "permissions": ["storage",
+    "activeTab",
+    "scripting",
+    "declarativeNetRequest",
+    "tts",
+    "tabCapture",
+    "tabs",
+    "history",
+    "downloads",
+    "downloads.shelf",
+    "contextMenus","http://localhost:3000/*"],
+  "host_permissions": ["https://*.youtube.com/*","http://localhost:3000/*"],
   "background": {
     "service_worker": "src/background.js"
   },
   "content_scripts": [
     {
       "matches": ["https://*.youtube.com/*","<all_urls>"],
-      "js": ["src/content.js","src/content2.js","src/modules/font.js",
+      "js": ["src/content.js","src/modules/font.js",
         "src/modules/detoxSearch.js",
         "src/modules/Screenrecorder.js",
         "src/modules/ScreenReader.js",
@@ -20,7 +30,7 @@
         "src/button.js",
         "src/modules/ads.js",
         "src/modules/videoTutorials.js",
-        "src/pop.js"
+        "src//modules/pop.js","src/modules/scan.js","src/modules/reallocate.js","src/index.js"
 ],
       "run_at": "document_idle",
       "css": ["public/popup.css"]
@@ -44,11 +54,10 @@
         "src/auth.js",
         "src/video.html",
         "src/modules/videoTutorials.js",
-        "src/pop.html",
-        "src/pop.js",
+        "src/modules/pop.html",
+        "src/modules/pop.js",
         "src/button.js",
-        "src/popup.js", "src/modules/ScreenReader.js"
-
+        "src/popup.js", "src/modules/ScreenReader.js","src/modules/scan.js","src/modules/sec.html","src/modules/reallocate.html","src/modules/reallocate.js","src/modules/sec.html"
       ],
       "matches": ["https://*.youtube.com/*","<all_urls>"]
     }
