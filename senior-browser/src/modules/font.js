@@ -11,8 +11,9 @@ function loadFontSettingsModal() {
     modal.style.boxShadow = '0px 0px 10px rgba(0, 0, 0, 0.2)';
     modal.style.zIndex = '10000';
     modal.style.borderRadius = '10px';
+    modal.style.textAlign = 'center';
 
-    // Font size input
+    // Font size input and button layout
     modal.innerHTML = `
         <h3>Adjust Font Settings</h3>
         <label>Font Size: </label><input type="number" id="fontSizeInput" value="16" min="8" max="72"><br><br>
@@ -23,23 +24,25 @@ function loadFontSettingsModal() {
             <option value="italic">Italic</option>
         </select><br><br>
         <label>Font Weight: </label>
-    <select id="fontWeightSelect">
-        <option value="normal">Normal</option>
-        <option value="bold">Bold</option>
-        <option value="bolder">Bolder</option>
-        <option value="lighter">Lighter</option>
-        <option value="100">100</option>
-        <option value="200">200</option>
-        <option value="300">300</option>
-        <option value="400">400</option>
-        <option value="500">500</option>
-        <option value="600">600</option>
-        <option value="700">700</option>
-        <option value="800">800</option>
-        <option value="900">900</option>
-    </select><br><br>
-        <button id="applyFontSettings">Apply</button>
-        <button id="closeModal">Close</button>
+        <select id="fontWeightSelect">
+            <option value="normal">Normal</option>
+            <option value="bold">Bold</option>
+            <option value="bolder">Bolder</option>
+            <option value="lighter">Lighter</option>
+            <option value="100">100</option>
+            <option value="200">200</option>
+            <option value="300">300</option>
+            <option value="400">400</option>
+            <option value="500">500</option>
+            <option value="600">600</option>
+            <option value="700">700</option>
+            <option value="800">800</option>
+            <option value="900">900</option>
+        </select><br><br>
+        <div style="display: flex; justify-content: space-between;">
+            <button id="applyFontSettings" style="flex: 1; margin-right: 5px;">Apply</button>
+            <button id="closeModal" style="flex: 1; background-color: red; color: white;">Close</button>
+        </div>
     `;
 
     document.body.appendChild(modal);
@@ -49,15 +52,15 @@ function loadFontSettingsModal() {
         const fontSize = document.getElementById('fontSizeInput').value;
         const fontColor = document.getElementById('fontColorInput').value;
         const fontStyle = document.getElementById('fontStyleSelect').value;
-        const fontWeight = document.getElementById('fontWeightSelect').value; // Get the selected font weight value
+        const fontWeight = document.getElementById('fontWeightSelect').value;
         applyFontSettings(fontSize, fontColor, fontStyle, fontWeight);
     });
-    
 
     document.getElementById('closeModal').addEventListener('click', () => {
         document.body.removeChild(modal);
     });
 }
+
 
 // Inject CSS to reset text styles across the page
 function injectGlobalFontStyle(css) {
