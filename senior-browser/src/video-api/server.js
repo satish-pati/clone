@@ -13,7 +13,7 @@ app.use(cors({
     origin: '*',
     methods: ['GET', 'POST','OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization'],
-    credentials: true
+    credentials: true 
 }));
 
 // Serve static files from the "videos" directory
@@ -61,13 +61,14 @@ async function addVideosToDatabase() {
         const videoFiles = fs.readdirSync(videosDir);
 
         for (const file of videoFiles) {
-            const videoUrl = `https://render-nl4l.onrender.com/videos/${file}`;
+            const title = path.parse(file).name
+            const videoUrl = `http://localhost:3000/videos/${file}`;
             const videoExists = await videosCollection.findOne({ url: videoUrl });
 
             if (!videoExists) {
                 await videosCollection.insertOne({
                     _id: new ObjectId(),
-                    title: `Tutorial ${file.match(/\d+/)}`,  // Creates title like "Tutorial 2" based on file name number
+                    title: title,  // Creates title like "Tutorial 2" based on file name number
                     url: videoUrl,
                 });
                 console.log(`Inserted video: ${file}`);
@@ -91,7 +92,7 @@ async function addVideosToDatabase() {
 
     // Start the server after initializing videos
     app.listen(port, () => {
-        console.log(`Server running on https://render-nl4l.onrender.com:${port}`);
+        console.log(`Server running on http://localhost:3000:${port}`);
     });
 })();
 app.get('/videos', async (req, res) => {
