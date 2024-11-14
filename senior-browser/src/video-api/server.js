@@ -16,7 +16,7 @@ app.use(cors({
     credentials: true 
 }));
 
-// Serve static files from the "videos" directory
+
 app.use('/videos', express.static(path.join(__dirname, 'videos')));
 app.use(express.static(path.join(__dirname, 'src')));
 app.use(express.json()); // Middleware to parse JSON
