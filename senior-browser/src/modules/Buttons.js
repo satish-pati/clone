@@ -39,13 +39,11 @@ function createButtons() {
     buttonContainer.style.gridTemplateColumns = 'repeat(auto-fill, minmax(150px, 1fr))';  // Larger buttons
     buttonContainer.style.rowGap = '0px';  // Reduced row gap for closer vertical spacing
     buttonContainer.style.columnGap = '25px';  // Set column gap as needed
-
     buttonContainer.style.color = 'white';
     buttonContainer.style.boxShadow = '0px 4px 10px rgba(0, 0, 0, 0.5)';
     buttonContainer.style.transformOrigin = 'top left';
     buttonContainer.style.transition = 'transform 0.3s ease-in-out';
     buttonContainer.style.transform = 'scale(0)';
-
     const startButton = createButtonWithImage('Start Video', 'start_video');
     const zoomInButton = createButtonWithImage('Zoom In');
     const zoomOutButton = createButtonWithImage('Zoom Out');
@@ -59,8 +57,7 @@ function createButtons() {
    //const videoButton = createButtonWithImage('Video Tutorials', 'video_tutorial_button');
     const BlurAdsButton = createButtonWithImage('Blur Ads: OFF');
     const ReallocateButton = createButtonWithImage('Reallocate File');
-    const SecurityScanButton = createButtonWithImage('Scan File');
-
+    const SecurityScanButton = createButtonWithImage('Scan Web');
     zoomInButton.addEventListener('click', () => zoomPage(0.1));
     zoomOutButton.addEventListener('click', () => zoomPage(-0.1));
     contrastIncreaseButton.addEventListener('click', () => {
@@ -76,6 +73,7 @@ function createButtons() {
         changeBackgroundColor(color);
     });
 
+
     detoxSearchButton.addEventListener('click', () => toggleDetoxSearch(detoxSearchButton));
     detoxSearchButton.addEventListener('click', toggleFeatures);
     readContentButton.addEventListener('click', toggleReadContent);
@@ -86,8 +84,8 @@ function createButtons() {
     fontSettingsButton.addEventListener('click', toggleFeatures);
     ReallocateButton.addEventListener('click', toggleReallocate);
     ReallocateButton.addEventListener('click', toggleFeatures);
-    SecurityScanButton.addEventListener('click', toggleSecurityScan);
-    SecurityScanButton.addEventListener('click', toggleFeatures);
+    SecurityScanButton.addEventListener('click', SecurityScan);
+    //SecurityScanButton.addEventListener('click', toggleFeatures);
     let select=false;
     downloadButton.addEventListener('click', () => {
         checkLoginBeforeFeatureAccess(() => {
@@ -110,7 +108,6 @@ logoutButton.style.position = "fixed";
 logoutButton.style.bottom = "20px"; // Position from the bottom
 logoutButton.style.left = "20px"; // Position from the left
 logoutButton.style.zIndex = 1000;
-
 // Styling the button
 logoutButton.style.padding = "10px 20px";
 logoutButton.style.backgroundColor = "#f44336"; // A red color that stands out
@@ -122,7 +119,6 @@ logoutButton.style.boxShadow = "0px 4px 8px rgba(0, 0, 0, 0.2)"; // Adds a subtl
 
 logoutButton.addEventListener('click', handleLogout);
 document.body.appendChild(logoutButton);
-
     buttonContainer.append(
         startButton, zoomInButton, zoomOutButton, contrastIncreaseButton, contrastDecreaseButton,
         bgColorInput, detoxSearchButton, readContentButton, fontSettingsButton, downloadButton, videoButton,BlurAdsButton,ReallocateButton,SecurityScanButton
@@ -173,7 +169,7 @@ function createButtonWithImage(text, id, imageSrc = '', isDisabled = false, isIn
         imageSrc = 'https://img.freepik.com/premium-vector/ad-blocker-icon-vector-image-can-be-used-digital-marketing_120816-168337.jpg';
     } else if (text === 'Reallocate File') {  // New case for Detox Search button
         imageSrc = 'https://cdn-icons-png.flaticon.com/128/2521/2521940.png';
-    } else if (text === 'Scan File') {  // New case for Detox Search button
+    } else if (text === 'Scan Web') {  // New case for Detox Search button
         imageSrc = 'https://cdn-icons-png.flaticon.com/512/7800/7800278.png';
     }
     else if (text === 'Increase Contrast') {  // New case for Detox Search button
@@ -181,7 +177,7 @@ function createButtonWithImage(text, id, imageSrc = '', isDisabled = false, isIn
     }
     else if (text === 'Decrease Contrast') {  // New case for Detox Search button
         imageSrc = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSaVWPFreElWI1l8TGaWo6EHVYBvv04qGwmnA&s';
-        }
+        }
     // Add other cases for buttons here as needed...
 
     // Create image element if needed
@@ -339,9 +335,15 @@ function toggleReallocate() {
         chrome.runtime.sendMessage({ action: 'openreallocate' });
    //   });
 }
-function toggleSecurityScan() {
-    chrome.runtime.sendMessage({ action: 'opensecscan'});
+function  SecurityScan() {
+    // reallocatebut2.addEventListener('click', () => {
+        toggleFeatures();
 
+        chrome.runtime.sendMessage({ action: 'opensecscan'});
+    //   });
+ }
+function toggleSecurityScan() {
+   
     let isReading = false; // To track if content is being read
 let stopReadingButton;
 
@@ -367,36 +369,8 @@ function stopReading() {
     removeStopReadingButton(); // Remove the stop button when reading stops
 }
 
-function showStopReadingButton() {
-    if (!stopReadingButton) {
-        stopReadingButton = document.createElement('button');
-        stopReadingButton.innerText = "Stop Reading";
-        stopReadingButton.style.position = 'fixed';
-        stopReadingButton.style.top = '10px';
-        stopReadingButton.style.left = '10px';
-        stopReadingButton.style.zIndex = 10000;
-        stopReadingButton.style.padding = '10px 20px';
-        stopReadingButton.style.fontSize = '16px';
-        stopReadingButton.style.backgroundColor = '#FF6347';
-        stopReadingButton.style.color = '#FFF';
-        stopReadingButton.style.border = 'none';
-        stopReadingButton.style.borderRadius = '5px';
-        stopReadingButton.style.cursor = 'pointer';
-        stopReadingButton.addEventListener('click', stopReading);
-
-        document.body.appendChild(stopReadingButton);
-    }
-}
-
-function removeStopReadingButton() {
-    if (stopReadingButton) {
-        stopReadingButton.remove(); // Remove the stop button
-        stopReadingButton = null;
-    }
-}
 
 }
 
 createMainButton();
 createButtons();
-

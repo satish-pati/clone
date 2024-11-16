@@ -32,21 +32,31 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   if (request.action === 'openreallocate') {
     console.log("start");
     chrome.windows.create({
-      url: chrome.runtime.getURL('src/reallocate.html'), 
+      url: chrome.runtime.getURL('src/modules/reallocate.html'), 
       type: 'popup',
       width: 400,
-      height: 300
+      height: 350
     });
   }
 if (request.action === 'opensecscan') {
   console.log("start");
-  chrome.windows.create({
-    url: chrome.runtime.getURL('src/modules/sec.html'), 
-    type: 'popup',
-    width: 400,
-    height: 300
-    });
-  }
+  // Query the current active tab to get its URL
+  chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+      const currentTab = tabs[0];
+      if (currentTab && currentTab.url) {
+          // Encode the URL and pass it as a query parameter
+          const pageUrl = encodeURIComponent(currentTab.url);
+          chrome.windows.create({
+              url: chrome.runtime.getURL(`src/modules/sec.html?url=${pageUrl}`),
+              type: 'popup',
+              width: 380,
+              height: 365
+          });
+      } else {
+          console.error("No active tab found or URL not available.");
+      }
+  });
+}
 
   if (request.action === 'readContent') {
     chrome.tts.speak(request.text, { rate: 1.0, pitch: 1.0, volume: 1.0 });

@@ -174,7 +174,6 @@ function showVideoModal(videos) {
     }
 
     renderVideoList(videos);
-
     searchInput.addEventListener('input', function () {
         const searchQuery = searchInput.value.toLowerCase();
         const filteredVideos = videos.filter(video => 
@@ -182,7 +181,6 @@ function showVideoModal(videos) {
         );
         renderVideoList(filteredVideos);
     });
-
     modalContent.appendChild(searchAndCloseContainer);
     modalContent.appendChild(videoTutorialsLabel);
     modalContent.appendChild(videoList);

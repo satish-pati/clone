@@ -27,10 +27,9 @@
         "src/modules/Buttons.js",
         "src/modules/download.js",
         "src/modules/voice.js",
-        "src/button.js",
-        "src/modules/ads.js",
+                "src/modules/ads.js",
         "src/modules/videoTutorials.js",
-        "src//modules/pop.js","src/modules/scan.js","src/modules/reallocate.js","src/index.js"
+        "src//modules/pop.js","src/modules/scan.js","src/modules/reallocate.js"
 ],
       "run_at": "document_idle",
       "css": ["public/popup.css"]
@@ -56,7 +55,6 @@
         "src/modules/videoTutorials.js",
         "src/modules/pop.html",
         "src/modules/pop.js",
-        "src/button.js",
         "src/popup.js", "src/modules/ScreenReader.js","src/modules/scan.js","src/modules/sec.html","src/modules/reallocate.html","src/modules/reallocate.js","src/modules/sec.html"
       ],
       "matches": ["https://*.youtube.com/*","<all_urls>"]
